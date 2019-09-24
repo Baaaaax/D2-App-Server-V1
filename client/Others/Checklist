@@ -1,0 +1,20 @@
+ - Make it Responsive.
+ - Fix same username for multi platforms.
+ - Clean Up the code.
+   - Search for redundant code
+   - Check for more reasonable logics
+ - Handle all the errors
+   - Like Cors Police and NET ERR
+
+ -
+ -
+ -
+ -
+ -
+
+////////////////////////////////
+ - Final Reviews 
+ - Final Clean Up
+ - Connect GitHub to Netlify
+ - Test and share
+ - Enjoy and be ready to fix bugs and take feedbacks!
