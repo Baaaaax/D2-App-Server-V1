@@ -59,11 +59,13 @@ class App extends Component {
         //   this.setState({ isLoading: false });
         // }); //"auriel#21174" tara#22686
 
+        //Calling the server
         var serverRes = axios
           .get(
-            `/getData?fInput=${this.state.firstInputValue}&&sInput=${this.state.secondInputValue}`
+            `/getData/${this.state.firstInputValue}/${this.state.secondInputValue}/${this.state.selectedCharacter}/${this.state.isPrivate}`
           )
           .then(r => {
+            console.log(r);
             this.setState({ isLoading: false });
           });
       }
