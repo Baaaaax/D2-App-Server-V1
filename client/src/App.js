@@ -62,7 +62,11 @@ class App extends Component {
         //Calling the server
         var serverRes = axios
           .get(
-            `/getData/${this.state.firstInputValue}/${this.state.secondInputValue}/${this.state.selectedCharacter}/${this.state.isPrivate}`
+            `/getData/${this.encodeLink(
+              this.state.firstInputValue
+            )}/${this.encodeLink(this.state.secondInputValue)}/${
+              this.state.selectedCharacter
+            }/${this.state.isPrivate}`
           )
           .then(r => {
             console.log(r);
@@ -149,6 +153,10 @@ class App extends Component {
       </div>
     );
   }
+
+  encodeLink = input => {
+    return encodeURIComponent(input);
+  };
 
   setPreviousBehaviour = async (name, secName, char, isPriv) => {
     this.setState({
