@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+const pLimit = require("p-limit");
+const limit = pLimit(50);
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -54,6 +56,7 @@ const fetchBehaviour = async (
     if (returnedObj.errorType === 0) {
       //Check if we find matches
       await getActivityHistory(selectedCharacter, isPrivate, returnedObj);
+      await getPostGameCarnageReport(returnedObj);
     }
   }
 };
@@ -207,6 +210,12 @@ const getHistoricalStats = async (selectedCharacter, isPriv, returnedObj) => {
           ];
         }
       }
+    } else {
+      returnedObj.activitiesListCount = [
+        response.data.Response.allPvP.allTime.activitiesEntered.basic.value,
+        response.data.Response.privateMatches.allTime.activitiesEntered.basic
+          .value
+      ];
     }
 
     returnedObj.tst = response.data.Response;
@@ -323,5 +332,82 @@ const activityFetch = async (
     console.log(error);
   }
 };
+
+const getPostGameCarnageReport = async returnedObj => {
+  // var arr = returnedObj.activitiesList;
+
+  // var requests = arr
+  //   .filter(e => {
+  //     return e !== "error";
+  //   })
+  //   .map(f => {
+  //     return limit(() => {
+  //       return this.pgcrFetch(f.activityDetails.instanceId, settings).then(
+  //         a => {
+  //           return a;
+  //         }
+  //       );
+  //     });
+  //   });
+
+  try {
+    var requests = returnedObj.activitiesListIds.map(e => {
+      return limit(() => {
+        return pgcrFetch(e).then(a => {
+          return a;
+        });
+      });
+    });
+
+    var response = await Promise.all(requests);
+
+    returnedObj.matchEntryPGCR = response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const pgcrFetch = async activityId => {
+  try {
+    const fetchUrl =
+      "https://www.bungie.net/Platform/Destiny2/Stats/PostGameCarnageReport/" +
+      activityId +
+      "/";
+    var response = await axios.get(fetchUrl, settings);
+    console.log("fetched matcheeee");
+    return {
+      data: response.data.Response.period
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// const checkIfPlayed = async () => {
+//   var copyArr = [...this.state.matchEntryPGCR];
+
+//   copyArr.forEach(e => {
+//     if (e !== "error" && e.data) {
+//       var standingValue = e.data.entries.find(f => {
+//         return (
+//           f.player.destinyUserInfo.membershipId === this.state.firstMembershipId
+//         );
+//       });
+
+//       e.data.entries.forEach(g => {
+//         if (g.standing !== standingValue.standing) {
+//           if (
+//             g.player.destinyUserInfo.membershipId ===
+//             this.state.secondMembershipId
+//           ) {
+//             this.setState(prevState => ({
+//               matchesToShow: [...prevState.matchesToShow, e.data]
+//             }));
+//           }
+//         }
+//       });
+//     }
+//   });
+// };
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
