@@ -292,121 +292,121 @@ class App extends Component {
       }
     }
   };
-  getMembershipsId = async (firstInputName, secondInputName, settings) => {
-    const encodedName = encodeURIComponent(firstInputName);
-    const encodedName2 = encodeURIComponent(secondInputName);
+  // getMembershipsId = async (firstInputName, secondInputName, settings) => {
+  //   const encodedName = encodeURIComponent(firstInputName);
+  //   const encodedName2 = encodeURIComponent(secondInputName);
 
-    const firstFetchUrl =
-      "https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/-1/" +
-      encodedName +
-      "/";
-    const secondFetchUrl =
-      "https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/-1/" +
-      encodedName2 +
-      "/";
+  //   const firstFetchUrl =
+  //     "https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/-1/" +
+  //     encodedName +
+  //     "/";
+  //   const secondFetchUrl =
+  //     "https://www.bungie.net/Platform/Destiny2/SearchDestinyPlayer/-1/" +
+  //     encodedName2 +
+  //     "/";
 
-    const response = await axios.get(firstFetchUrl, settings);
-    const response2 = await axios.get(secondFetchUrl, settings);
+  //   const response = await axios.get(firstFetchUrl, settings);
+  //   const response2 = await axios.get(secondFetchUrl, settings);
 
-    console.log(response);
-    console.log(response2);
-    if (
-      response.data.Response.length > 0 &&
-      response2.data.Response.length > 0
-    ) {
-      this.setState({
-        firstMembershipId: response.data.Response[0].membershipId,
-        secondMembershipId: response2.data.Response[0].membershipId,
-        membershipType: response.data.Response[0].membershipType
-      });
-    } else {
-      if (response.data.Response.length <= 0) {
-        this.handleErrors(1, firstInputName);
-      } else {
-        this.handleErrors(1, secondInputName);
-      }
-    }
-  };
+  //   console.log(response);
+  //   console.log(response2);
+  //   if (
+  //     response.data.Response.length > 0 &&
+  //     response2.data.Response.length > 0
+  //   ) {
+  //     this.setState({
+  //       firstMembershipId: response.data.Response[0].membershipId,
+  //       secondMembershipId: response2.data.Response[0].membershipId,
+  //       membershipType: response.data.Response[0].membershipType
+  //     });
+  //   } else {
+  //     if (response.data.Response.length <= 0) {
+  //       this.handleErrors(1, firstInputName);
+  //     } else {
+  //       this.handleErrors(1, secondInputName);
+  //     }
+  //   }
+  // };
 
-  getProfile = async settings => {
-    const fetchUrl =
-      "https://www.bungie.net/Platform/Destiny2/" +
-      this.state.membershipType +
-      "/Profile/" +
-      this.state.firstMembershipId +
-      "/?components=100,200";
+  // getProfile = async settings => {
+  //   const fetchUrl =
+  //     "https://www.bungie.net/Platform/Destiny2/" +
+  //     this.state.membershipType +
+  //     "/Profile/" +
+  //     this.state.firstMembershipId +
+  //     "/?components=100,200";
 
-    const response = await axios.get(fetchUrl, settings);
-    console.log(response);
+  //   const response = await axios.get(fetchUrl, settings);
+  //   console.log(response);
 
-    this.setState({
-      characterIds: response.data.Response.profile.data.characterIds,
-      classHashes: Object.keys(response.data.Response.characters.data).map(
-        e => {
-          return response.data.Response.characters.data[e].classHash;
-        }
-      )
-    });
+  //   this.setState({
+  //     characterIds: response.data.Response.profile.data.characterIds,
+  //     classHashes: Object.keys(response.data.Response.characters.data).map(
+  //       e => {
+  //         return response.data.Response.characters.data[e].classHash;
+  //       }
+  //     )
+  //   });
 
-    await this.setCharacterOrder(response.data.Response.characters.data);
-  };
+  //   await this.setCharacterOrder(response.data.Response.characters.data);
+  // };
 
-  setCharacterOrder = async characterObj => {
-    console.log(characterObj);
-    var copyArr = [...this.state.characterIds];
-    Object.keys(characterObj).forEach(e => {
-      switch (characterObj[e].classType) {
-        case 0:
-          if (e !== copyArr[0]) {
-            console.log("old copy arr ", copyArr);
-            this.insertAndShift(copyArr, copyArr.indexOf(e), 0);
-            console.log("new copy arr ", copyArr);
-          }
-          break;
-        case 1:
-          if (e !== copyArr[1]) {
-            console.log("old copy arr ", copyArr);
-            this.insertAndShift(copyArr, copyArr.indexOf(e), 1);
-            console.log("new copy arr ", copyArr);
-          }
-          break;
-        case 3:
-          if (e !== copyArr[2]) {
-            console.log("old copy arr ", copyArr);
-            this.insertAndShift(copyArr, copyArr.indexOf(e), 2);
-            console.log("new copy arr ", copyArr);
-          }
-          break;
-      }
-    });
-    this.setState({ characterIds: copyArr });
-  };
+  // setCharacterOrder = async characterObj => {
+  //   console.log(characterObj);
+  //   var copyArr = [...this.state.characterIds];
+  //   Object.keys(characterObj).forEach(e => {
+  //     switch (characterObj[e].classType) {
+  //       case 0:
+  //         if (e !== copyArr[0]) {
+  //           console.log("old copy arr ", copyArr);
+  //           this.insertAndShift(copyArr, copyArr.indexOf(e), 0);
+  //           console.log("new copy arr ", copyArr);
+  //         }
+  //         break;
+  //       case 1:
+  //         if (e !== copyArr[1]) {
+  //           console.log("old copy arr ", copyArr);
+  //           this.insertAndShift(copyArr, copyArr.indexOf(e), 1);
+  //           console.log("new copy arr ", copyArr);
+  //         }
+  //         break;
+  //       case 3:
+  //         if (e !== copyArr[2]) {
+  //           console.log("old copy arr ", copyArr);
+  //           this.insertAndShift(copyArr, copyArr.indexOf(e), 2);
+  //           console.log("new copy arr ", copyArr);
+  //         }
+  //         break;
+  //     }
+  //   });
+  //   this.setState({ characterIds: copyArr });
+  // };
 
-  insertAndShift = (arr, from, to) => {
-    let cutOut = arr.splice(from, 1)[0]; // cut the element at index 'from'
-    return arr.splice(to, 0, cutOut); // insert it at index 'to'
-  };
+  // insertAndShift = (arr, from, to) => {
+  //   let cutOut = arr.splice(from, 1)[0]; // cut the element at index 'from'
+  //   return arr.splice(to, 0, cutOut); // insert it at index 'to'
+  // };
 
-  getHistoricalStats = async settings => {
-    const fetchUrl =
-      "https://www.bungie.net/Platform//Destiny2/" +
-      this.state.membershipType +
-      "/Account/" +
-      this.state.firstMembershipId +
-      "/Character/" +
-      this.state.characterIds[this.state.selectedCharacter] +
-      "/Stats/?modes=5,32";
+  // getHistoricalStats = async settings => {
+  //   const fetchUrl =
+  //     "https://www.bungie.net/Platform//Destiny2/" +
+  //     this.state.membershipType +
+  //     "/Account/" +
+  //     this.state.firstMembershipId +
+  //     "/Character/" +
+  //     this.state.characterIds[this.state.selectedCharacter] +
+  //     "/Stats/?modes=5,32";
 
-    const response = await axios.get(fetchUrl, settings);
-    console.log("hisroty ", response);
-    this.setState({
-      activitiesListCount: [
-        response.data.Response.allPvP.allTime.activitiesEntered.basic.value,
-        response.data.Response.privateMatches.allTime.activitiesEntered.basic
-          .value
-      ]
-    });
-  };
+  //   const response = await axios.get(fetchUrl, settings);
+  //   console.log("hisroty ", response);
+  //   this.setState({
+  //     activitiesListCount: [
+  //       response.data.Response.allPvP.allTime.activitiesEntered.basic.value,
+  //       response.data.Response.privateMatches.allTime.activitiesEntered.basic
+  //         .value
+  //     ]
+  //   });
+  // };
 
   getActivityHistory = async settings => {
     var actListCount = this.state.isPrivate
