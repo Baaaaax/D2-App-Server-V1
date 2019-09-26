@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const pLimit = require("p-limit");
-const limit = pLimit(50);
+const limit = pLimit(10);
+const Promise = require("bluebird");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -360,7 +361,7 @@ const getPostGameCarnageReport = async returnedObj => {
     });
 
     var response = await Promise.all(requests);
-
+    console.log(response);
     returnedObj.matchEntryPGCR = response;
   } catch (error) {
     console.log(error);
@@ -374,7 +375,7 @@ const pgcrFetch = async activityId => {
       activityId +
       "/";
     var response = await axios.get(fetchUrl, settings);
-    console.log("fetched matcheeee");
+
     return {
       data: response.data.Response.period
     };
